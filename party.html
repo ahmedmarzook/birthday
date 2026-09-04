@@ -339,20 +339,20 @@
 
   const hero = document.getElementById('hero');
   const giftBox = document.getElementById('giftBox');
+  const musicBtn = document.getElementById('musicBtn');
+  const bgAudio = document.getElementById('bgAudio');
+
   giftBox.addEventListener('click', ()=>{
     hero.classList.add('revealed');
     burstConfetti();
     setTimeout(burstConfetti, 500);
     // try to start music on the same user gesture
-    const audio = document.getElementById('bgAudio');
-    audio.play().then(()=>{
-      document.getElementById('musicBtn').classList.add('spinning');
+    bgAudio.play().then(()=>{
+      musicBtn.classList.add('spinning');
     }).catch(()=>{ /* file may be missing until the user adds one */ });
   });
 
   // music toggle button
-  const musicBtn = document.getElementById('musicBtn');
-  const bgAudio = document.getElementById('bgAudio');
   musicBtn.addEventListener('click', ()=>{
     if(bgAudio.paused){
       bgAudio.play().then(()=>musicBtn.classList.add('spinning')).catch(()=>{
@@ -362,6 +362,16 @@
       bgAudio.pause();
       musicBtn.classList.remove('spinning');
     }
+  });
+
+  // 🎵 try to start the song automatically as soon as this page loads —
+  // this works because the click on the rose in index.html counts as the
+  // "user gesture" that unlocked audio for this navigation, in most browsers.
+  bgAudio.play().then(()=>{
+    musicBtn.classList.add('spinning');
+  }).catch(()=>{
+    // autoplay blocked by the browser (can happen on some phones/first visits) —
+    // she can just tap the 🎵 button, or opening the gift box will also start it.
   });
 </script>
 
